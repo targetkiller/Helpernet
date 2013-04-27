@@ -1,0 +1,18 @@
+#{extends 'base-father.html' /} 
+<div class="container">
+    <div class="row">
+			#{doLayout /}
+    </div>
+</div>
+
+    <script>
+	    $(function(){
+	        $(".form-horizontal input,.navbar-form input,.form-horizontal textArea").focus(function(){
+	            var group = $(this).parents(".control-group").removeClass('error').removeClass('info').removeClass('warning').removeClass('success');
+	            group.find('span.help-block').remove();
+	            group.find('span.help-inline').html("");
+	        });
+	    });
+	</script>
+    </body>
+</html>

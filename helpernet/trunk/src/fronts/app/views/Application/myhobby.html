@@ -1,0 +1,250 @@
+#{extends 'base-fronts.html' /}
+#{set myhobby:'active' /}
+<div class="myhobby-tag">
+	<h3><strong>按标签分类</strong></h3>
+	<span>英语</span>
+	<span class="active">计算机</span>
+	<span>重口味</span>
+	<span>高数</span>
+</div>
+
+	<div class="btn-group hobby-status" data-toggle="buttons-radio">
+	  <a href="@{Application.myhobby(0,1)}"><button type="button" class="btn ">申请中</button></a>
+	  <a href="@{Application.myhobby(1,1)}"><button type="button" class="btn ">处理中</button></a>
+	  <a href="@{Application.myhobby(2,1)}"><button type="button" class="btn ">已结束</button></a>
+	</div>
+
+	#{if flash.error}
+	<div class="alert alert-success" id="message" style="width:550px;margin-left:145px;">
+		<a class="close" data-dismiss="alert">×</a> 
+		${flash.error}
+	</div>
+	#{/if}
+	<!-- whocomelist -->
+	<div class="whocomelist"> 
+	#{list items: eventList,as:'event'}
+		<div class="whocome" id="${event.id}">
+			<div class="whocome-left">
+				<img id="navimg" src="&{'fronts.base'}public/common/images/touxiang.jpg" title="头像"/>
+
+				<i class="icon-user"></i><a href="@{UserZone.UserInfo(event.userId)}">${event.getUserName()}</a>
+
+			</div>
+			<div class="whocome-right">
+				<div class="whocome-right-first">
+				<span class="label1">标题</span><a href="@{Detail.detail(event.id)}">&nbsp;${event.title}</a>
+				</div>
+				
+				<div class="whocome-right-second">
+				<span class="label label-success">正文</span>
+					${event.content}
+				</div>
+				<span class="label">标签</span>&nbsp;
+					#{list items:event.getTagList(),as:'tag'}
+					<a href="#">${tag.name}</a>
+					#{/list}
+					<button class="btn btn-small" onclick="location='@{Detail.detail(event.id)}'">详情</button>
+					#{if state==0}<!-- 只有处于申请状态的才可以被操作 -->
+					#{if controllers.UserSecure.isConnected()==false}<!-- 未登录则先登录 -->
+					<button class="btn btn-small btn-success" onclick="alert('请先登录!')">我来<i class="icon-thumbs-up icon-white"></i></button>
+					#{/if}
+					#{else}
+					#{if event.userId==controllers.UserSecure.getUserId()}<!-- 如果是自己发的则可以删除 -->
+					<button class="btn btn-small btn-success1" onclick="deleteEvent(${event.id});">删除<i class="icon-thumbs-up icon-white"></i></button>
+					#{/if}
+					#{else}
+					#{if event.isJoin()==true}<!-- 如果参与过，则可以取消 -->
+					<button class="btn btn-small btn-success" id="${event.id}cancel" onclick="cancelEvent(${event.id});">取消<i class="icon-thumbs-up icon-white"></i></button>
+					<button style="display:none;" class="btn btn-small btn-success" id="${event.id}join" onclick="joinEvent(${event.id});">我来<i class="icon-thumbs-up icon-white"></i></button>
+					#{/if}
+					#{else}<!-- 否则则可以参与 -->
+					<button class="btn btn-small btn-success" id="${event.id}join" onclick="joinEvent(${event.id});">我来<i class="icon-thumbs-up icon-white"></i></button>
+					<button style="display:none;" class="btn btn-small btn-success" id="${event.id}cancel" onclick="cancelEvent(${event.id});">取消<i class="icon-thumbs-up icon-white"></i></button>
+					#{/else}
+					#{/else}
+					#{/else}
+					#{/if}	
+					
+					
+					
+					#{else}
+
+					<button class="btn btn-small btn-success" onclick="joinEvent(${event.id});">我来<i class="icon-thumbs-up icon-white"></i></button>
+
+					#{if event.userId==controllers.UserSecure.getUserId()}<!-- 如果是自己发的则可以删除 -->
+					<button class="btn btn-small btn-success" onclick="deleteEvent(${event.id});">删除<i class="icon-thumbs-up icon-white"></i></button>
+					#{/if}
+
+					#{/else}
+			</div>
+		</div>
+		<span class="whocometime">发布于:&nbsp;${event.time.asdate('yyyy年MM月dd日')}</span>
+		#{/list}
+		</div>
+		<form action="@{Application.myhobby}" >
+		<input type="hidden" name="state" value="${state}">
+		<select class="span1" style="margin-left:630px;margin-top:10px" name="page">
+		#{list items: pageList,as:'pagelist'}
+		<option value=${pagelist}>${pagelist}</option>
+        #{/list}
+        </select>
+        <input type="submit" class="btn btn-primary" value="跳转">
+        </form>
+
+        <script type="text/javascript">
+	function sendTitleshowOrhide(obj){
+		if(obj.id=="Titleoff")
+		{
+			obj.id="Titleon";
+			$("#sendTitle").show();
+		}
+		else
+		{
+			obj.id="Titleoff";
+			$("#sendTitle").hide();
+		}
+	}
+	function sendTagshowOrhide(obj){
+		if(obj.id=="Tagoff")
+		{
+			obj.id="Tagon";
+			$("#sendTag").show();
+		}
+		else
+		{
+			obj.id="Tagoff";
+			$("#sendTag").hide();
+		}
+	}
+	function sendExtrashowOrhide(obj){
+		if(obj.id=="Extraoff")
+		{
+			obj.id="Extraon";
+			$("#sendExtra").show();
+		}
+		else
+		{
+			obj.id="Extraoff";
+			$("#sendExtra").hide();
+		}
+	}
+	function sendTitleshow(){document.getElementById("Titleon").setAttribute("id","Titleoff");$("#sendTitle").hide();}
+	function sendTagshow(){document.getElementById("Tagon").setAttribute("id","Tagoff");$("#sendTag").hide();}
+	function sendExtrashow(){document.getElementById("Extraon").setAttribute("id","Extraoff");$("#sendExtra").hide();}
+	function addTag(){
+	$("#addTagDialog").modal("show");
+}
+	var ImgId=0;
+	var ary = new Array();
+	ary[0]="&{'fronts.base'}public/common/images/navimg1.jpg";
+	ary[1]="&{'fronts.base'}public/common/images/navimg2.jpg";
+	ary[2]="&{'fronts.base'}public/common/images/navimg3.jpg";
+	ary[3]="&{'fronts.base'}public/common/images/navimg4.jpg";
+	ary[4]="&{'fronts.base'}public/common/images/navimg5.jpg";
+	ary[5]="&{'fronts.base'}public/common/images/navimg6.jpg";
+	function changeImg(obj){
+		if (ImgId<6) 
+		{
+			obj.setAttribute("src",ary[ImgId]);
+			ImgId++;
+		}
+		else
+		{
+			ImgId=0;
+			obj.setAttribute("src",ary[ImgId]);
+			ImgId++;
+		}
+	}
+	function checkForm(){
+		var error="";
+		flag=1;
+		if($("#title").val()==''){
+			flag=0;
+			error+="标题不能为空       ";
+		}
+		if($("#content").val()==''){
+			flag=0;
+			error+="内容不能为空！"
+		}
+		if(flag==0){
+			alert(error);
+		}else{
+			document.getElementById("helpform").submit();
+		}
+	}
+	function deleteEvent(id){
+		$.ajax({
+			   type:'post',
+			   url:'/HelpInfo/deleteEvent',
+			   data:{
+				   eventId:id
+			   },
+			   dataType:'json',
+			   success:function(data){
+				   if(data.status==200){
+					   $("#"+id).hide();
+					   alert(data.info);
+				   }
+                   if(data.status==401){//帮帮已不存在
+                	   $("#"+id).hide();
+					   alert(data.info);
+				   }
+                   if(data.status==402){//删除的不是自己的帮帮
+                	   alert(data.info);
+                   }
+			   },
+			   error:function(){
+				  alert("删除失败!");
+			   }
+	    })
+	}
+	function joinEvent(id){
+		$.ajax({
+			   type:'post',
+			   url:'/HelpInfo/joinEvent',
+			   data:{
+				   eventId:id
+			   },
+			   dataType:'json',
+			   success:function(data){
+				   if(data.status==200){
+					   $("#"+id+"join").hide();
+					   $("#"+id+"cancel").show();
+					   alert(data.info);
+				   }
+				   if(data.status==401){
+					   $("#"+id).hide();
+					   alert(data.info);
+				   }
+			   },
+			   error:function(){
+				  alert("操作失败!");
+			   }
+		}) 		
+	}
+	function cancelEvent(id){
+		$.ajax({
+			   type:'post',
+			   url:'/HelpInfo/cancelEvent',
+			   data:{
+				   eventId:id
+			   },
+			   dataType:'json',
+			   success:function(data){
+				   if(data.status==200){
+					   $("#"+id+"cancel").hide();
+					   $("#"+id+"join").show();
+					   alert(data.info);
+				   }
+				   if(data.status==401){//帮帮不存在
+					   $("#"+id).hide();
+					   alert(data.info);
+				   }
+			   },
+			   error:function(){
+				  alert("操作失败!");
+			   }
+		})
+	}
+	
+</script>

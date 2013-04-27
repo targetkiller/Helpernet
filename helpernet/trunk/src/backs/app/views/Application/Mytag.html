@@ -1,0 +1,66 @@
+#{extends 'base-backs.html' /}
+
+<div class="backpage">
+	<div class="backpage-nav">
+		<ul class="breadcrumb">
+			<li><a href="@{application.Backpage}">首页</a> <span
+				class="divider">/</span></li>
+			<li><a href="@{application.Checkmylist}">我的"谁来"</a> <span
+				class="divider">/</span></li>
+			<li><a href="@{application.Myinfo}">修改个人信息</a> <span
+				class="divider">/</span></li>
+			<li><a href="@{application.Mypassword}">修改密码</a> <span
+				class="divider">/</span></li>
+			<li class="active">添加我的标签<span class="divider">/</span></li>
+		</ul>
+	</div>
+	<div class="mytag">
+		<div class="addmytag">
+			添加标签:&nbsp;
+			<form action="@{Application.addTag}">
+				<input type="text" class="input" name="tagName" placeholder="输入标签名"
+					id="tagName">
+				<input type="submit" class="addmytagok btn btn-primary" value="确定"/>
+			</form>
+
+		</div>
+		<div class="tagshow" id="tagshow">
+			#{list items:tagList,as:'tag'}
+			<code>
+				${tag.name}<a href="@{Application.deleteTag(tag.id)}">
+				<i class="icon-remove"></i></a>
+			</code>
+			#{/list}
+		</div>
+	</div>
+</div>
+#{set 'moreScripts' }
+<script type="text/javascript">
+	function ajaxaddtag() {
+		var value = $("#tagName").val();
+		if (value == null || value == '') {
+			alert("标签名不能为空!");
+		} else {
+			$.ajax({
+				type : 'post',
+				url : '/ManagerControll/addTag',
+				data : {
+					tagName : $("#tagName").val()
+				},
+				dataType : 'json',
+				success : function(data) {
+					if (data.status == 200) {
+						$("#tagshow").append("<code>" + value + "</code>");
+						alert(data.message);
+					} else {
+						alert(data.message);
+					}
+				},
+				error : function() {
+					alert("添加失败!");
+				}
+			})
+		}
+	}
+</script>
+#{/set}

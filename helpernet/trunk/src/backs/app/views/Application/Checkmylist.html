@@ -1,0 +1,66 @@
+#{extends 'base-backs.html' /}
+
+<div class="backpage">
+	<div class="backpage-nav">
+		<ul class="breadcrumb">
+		  <li><a href="@{application.Backpage}">首页</a> <span class="divider">/</span></li>
+		  <li class="active">我的"谁来"<span class="divider">/</span></li>
+		  <li><a href="@{application.Myinfo}">修改个人信息</a> <span class="divider">/</span></li>
+		  <li><a href="@{application.Mypassword}">修改密码</a> <span class="divider">/</span></li>
+		  <li><a href="@{application.Mytag}">添加我的标签</a> <span class="divider">/</span></li>
+	    </ul>
+	</div>
+	<div class="btn-group myhobby-status" data-toggle="buttons-radio">
+	  <a  class="btn btn-primary" href="@{Application.Checkmylist(0)}">申请中</a>
+	  <a  class="btn btn-primary" href="@{Application.Checkmylist(1)}">处理中</a>
+	  <a  class="btn btn-primary" href="@{Application.Checkmylist(2)}">已结束</a>
+	</div>
+	<div class="mywhocomelist"> 
+	#{list items:eventList,as:'event'}
+		<div class="mywhocome" id="${event.id}">
+			<div>
+				<span class="label">标题</span>
+				<span class="oneline">&nbsp;${event.title}</span>
+			</div>
+			<div class="label label-success">正文</div>
+			<p>${event.content}</p>
+			<span class="label">标签</span>&nbsp;
+				#{list items:event.getTagList(),as:'tag'}
+					<a href="#">${tag.name}</a>
+				#{/list}
+			<div class="floatr">
+				<button class="btn btn-small" onclick="location='@{Detail.detail(event.id)}'">查看</button>
+				<button class="btn btn-small btn-danger" onclick="deleteEvent(${event?.id});">删除</button>	
+			</div>
+		</div>
+		#{/list}
+	</div><!-- whocomelist end-->
+</div>
+<script type="text/javascript">
+function deleteEvent(id){
+	$.ajax({
+		   type:'post',
+		   url:'/HelpInfo/deleteEvent',
+		   data:{
+			   eventId:id
+		   },
+		   dataType:'json',
+		   success:function(data){
+			   if(data.status==200){
+				   $("#"+id).hide();
+				   alert(data.info);
+			   }
+               if(data.status==401){//帮帮已不存在
+            	   $("#"+id).hide();
+				   alert(data.info);
+			   }
+               if(data.status==402){//删除的不是自己的帮帮
+            	   alert(data.info);
+               }
+		   },
+		   error:function(){
+			  alert("删除失败!");
+		   }
+    })
+}
+</script>

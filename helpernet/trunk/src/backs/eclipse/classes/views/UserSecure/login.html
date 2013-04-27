@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!-- 谁来网 帮助你身边的人-->
+<html>
+    <head>
+        <title>谁来网-登陆页面</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- Le styles -->
+        <link rel="stylesheet" media="screen" href="@{'/public/common/stylesheets/bootstrap.min.css'}">
+        <link rel="stylesheet" media="screen" href="@{'/public/common/stylesheets/bootstrap-responsive.min.css'}">
+        <link rel="stylesheet" media="screen" href="@{'/public/common/stylesheets/common.css'}">
+        <script src="@{'/public/common/javascripts/jquery-1.7.1.min.js'}" type="text/javascript"></script>
+    </head>
+<body>
+    <div class="helpernet-nav row">
+        <div class="container">
+          <a href="&{'fronts.base'}"> <img class="logo" src="http://localhost:9303/public/common/images/helpernetlogo.jpg"></img></a>
+        </div>
+    </div>
+     <div class="login-box">
+		<div class="login-title">
+			<h3>用户登录</h3>
+			#{if flash.error}
+	        <div class="alert alert-error login-error">${flash.error}</div>
+	        #{/if} 
+		</div>
+		<form method="post" class="form-horizontal" action="@{UserSecure.authenticate}" id="logform" onsubmit="return chkform()">
+			<fieldset>
+				<div class="control-group">
+					<label for="account" class="control-label" >账号</label>
+					<div class="controls">
+						<input type="text" name="account" id="account" class="input" /><span class="errinfo" id="err_account"></span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label for="password" class="control-label">密码</label>
+					<div class="controls">
+						<input type="password" name="password" id="password"  class="input" /><span class="errinfo" id="err_password"></span>
+					</div>
+				</div>
+			</fieldset>
+			<div class="form-option">
+				<input class="btn btn-primary btn-login" type="submit" value="&nbsp;&nbsp;&nbsp;登录&nbsp;&nbsp;&nbsp;" />
+				<!-- <a type="submit" class="btn btn-primary btn-login">&nbsp;&nbsp;&nbsp;登录&nbsp;&nbsp;&nbsp;</a> -->
+				<a type="submit" class="btn btn-primary btn-login" href="http://local.scauhci.org:9303">取消登陆</a>
+			</div>
+			<a href="@{UserSecure.register}" class="otherchoice">还没有帐户？现在就注册！</a>
+		</form>
+	</div>
+	<div class="footer">
+	            &copy;2013&nbsp;<a href="&{'fronts.base'}application/aboutus" target="_blank">华南农业大学信息学院人机交互研究中心学生部</a>
+	        </div>
+	        <!--footer结束-->
+	        <!--底部script开始-->
+    </body>
+</html>

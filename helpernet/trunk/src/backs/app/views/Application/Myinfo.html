@@ -1,0 +1,124 @@
+#{extends 'base-backs.html' /}
+
+<div class="backpage">
+	<div class="backpage-nav">
+		<ul class="breadcrumb">
+		  <li><a href="@{application.Backpage}">首页</a> <span class="divider">/</span></li>
+		  <li><a href="@{application.Checkmylist}">我的"谁来"</a> <span class="divider">/</span></li>
+		  <li class="active">修改个人信息<span class="divider">/</span></li>
+		  <li><a href="@{application.Mypassword}">修改密码</a> <span class="divider">/</span></li>
+		  <li><a href="@{application.Mytag}">添加我的标签</a> <span class="divider">/</span></li>
+		</ul>
+	</div>
+	#{if flash.error}
+	<div class="alert alert-error">
+    ${flash.error}
+    </div>
+	#{/if}
+	
+	
+	#{if flash.success}
+	<div class="alert alert-success">
+    ${flash.success}
+    </div>
+	#{/if}
+	<form class="form-horizontal myinfo-form" action="@{Application.updatePersonalInfo}">
+		<div class="control-group">
+			<label class="control-label" for="name"><span class="red">*</span>昵称</label>
+			<div class="controls">
+				<input type="text" class="input-xlarge" onblur="onBlur(this);"
+					name="nickname" id="nickname" placeholder="字母，数字，汉字"
+					value="${user?.nickname}"> <span id="nametip"
+					class="label label-important hide">昵称不能为空</span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="account" >帐号名</label>
+			<div class="controls">
+				<span class="input-xlarge uneditable-input"  id="account">${user?.account}</span>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="sex">姓别</label>
+			<div class="controls">
+				<select id="sex" name="userInfo.sex">
+				#{if userInfo?.sex==0}
+					<option value="0" selected="selected">请选择</option>
+					<option value="1">男</option>
+					<option value="2">女</option>
+				#{/if}	
+				#{if userInfo?.sex==1}
+					<option value="0">请选择</option>
+					<option value="1" selected="selected">男</option>
+					<option value="2">女</option>
+				#{/if}	
+				#{if userInfo?.sex==2}
+					<option value="0">请选择</option>
+					<option value="1">男</option>
+					<option value="2"  selected="selected">女</option>
+				#{/if}		
+				</select>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="email">邮箱</label>
+			<div class="controls">
+				<input type="text" name="userInfo.email" value="${userInfo?.email}" class="input-xlarge" id="email"  placeholder="请输入邮箱"></input>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="longtel">电话</label>
+			<div class="controls">
+				<input type="text" name="userInfo.longTel" value="${userInfo?.longTel}" class="input-medium" id="longtel" placeholder="你的长号"></input>
+				<input type="text"  name="userInfo.shortTel" value="${userInfo?.shortTel}" class="input-small" id="shorttel" placeholder="你的短号"></input>
+			</div>
+		</div>
+		
+		<div class="control-group">
+			<label class="control-label" for="qq" >QQ</label>
+			<div class="controls">
+				<input type="text" name="userInfo.qq" value="${userInfo?.qq}" class="input-xlarge" id="qq" placeholder="请输入QQ"></input>
+			</div>
+		</div>
+		
+		<div class="control-group">
+			<label class="control-label" for="msn">MSN</label>
+			<div class="controls">
+				<input type="text" name="userInfo.msn" value="${userInfo?.msn}" class="input-xlarge" id="msn" placeholder="请输入MSN"></input>
+			</div>
+		</div>
+		
+
+		<div class="myinfo-from-actions">
+		  <button type="submit" class="btn btn-primary">保存</button>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+    	$("#message").fadeIn("slow").fadeTo(3E3,0.99).fadeOut("slow");
+     });
+	var flag = 1;
+	function onUpdate() {
+		if (flag == 0) {
+			alert("请改正错误后再保存！");
+		} else {
+			document.getElementById("updateForm").submit();
+		}
+
+	}
+	function onBlur(obj) {
+		if (obj.value == '') {
+			$("#nametip").show();
+			flag = 0;
+		} else {
+			$("#nametip").hide();
+			flag = 1;
+		}
+	}
+	
+</script>

@@ -1,0 +1,80 @@
+#{extends 'base-father.html' /} 
+
+<div class="userzone">
+	<div class="name">
+		<span class="big strong">${user?.name}的个人空间&nbsp;&nbsp;</span>
+		<span><img class="touxiang" src="@{'/public/common/images/touxiang.jpg'}" /></span>
+	</div>
+	<div class="allblock">
+		<div class="blocktwoimg imgblock other">
+			<img src="@{'/public/common/images/imgblock.png'}" />
+		</div>
+		<div class="blockimg docblock pointer">
+			<img src="@{'/public/common/images/docimg.png'}" onclick="lookdocs()"/>
+		</div>
+		<div class="blockimg homeblock other pointer">
+			<img src="@{'/public/common/images/homeimg.png'}" onclick="backtohome()" />
+		</div>
+		<div class="blocktwo chatblock other">
+			<img src="@{'/public/common/images/chatimg.png'}" />
+			<div class="text">${userInfo?.qq} / ${userInfo?.msn}</div>
+		</div>
+		<div class="blocktwo telblock other">
+			<img src="@{'/public/common/images/telimg.png'}" />
+			<div class="text">${userInfo?.longTel}/${userInfo?.shortTel}</div>
+		</div>
+		<div class="blocktwo coinblock other">
+			<img src="@{'/public/common/images/coinimg.png'}" />
+			<div class="text">${userInfo?.email}</div>
+		</div>
+		<div class="blocktwo emailblock other">
+			<img src="@{'/public/common/images/emailimg.png'}" />
+			<div class="text">${userInfo?.email}</div>
+		</div>
+	</div><!-- allblock -->
+	<div class="listview hide">
+		<div class="backblockimg backdocblock pointer">
+			<img src="@{'/public/common/images/docimg.png'}" onclick="backdocs()"/>
+		</div>
+		<!-- whocomelist -->
+		<div class="whocomelist"> 
+			<div class="whocome">
+				<div class="whocome-left">
+					<img id="navimg" src="&{'fronts.base'}public/common/images/touxiang.jpg" title="头像"/>
+					<i class="icon-user"></i><a href="#">谭照强</a>
+				</div>
+				<div class="whocome-right">
+					<div class="whocome-right-first">
+					标题:&nbsp;&nbsp;<a href="@{Detail.detail}">找人帮做C语言</a>
+					</div>
+					<div class="whocome-right-second">
+						我想找人帮帮我做C语言T_T我想找人帮帮我做C语言T_T我想找人帮帮我做C语言T_T我想找人帮帮我做C语言T_T我想找人帮帮我做C语言T_T我想找人帮帮我做C语言T_T我想找人帮帮我做C语言T_T我想找人帮帮我做C语言T_T
+					</div>
+						标签:&nbsp;<a href="#">数学</a>&nbsp;<a href="#">数学</a>&nbsp;<a href="#">数学</a>
+						<button class="btn btn-small" onclick="location='@{Detail.detail}'">详情</button>
+						<button class="btn btn-small btn-success">我来<i class="icon-thumbs-up icon-white"></i></button>	
+				</div>
+			</div>
+		</div>
+		<!-- whocomelist end -->
+	</div><!--listview-->
+</div><!--userzoon-->
+
+<script type="text/javascript">
+	function lookdocs(){
+			$(".allblock").hide();
+	       $(".listview").show();
+		  obj.setAttribute("id",1);
+		}
+	function backdocs(){
+		  $(".allblock").show();
+		  $(".listview").hide();
+		  obj.setAttribute("id",0);
+		}
+	function backtohome(){
+		window.location.href="&{'fronts.base'}"
+	}
+</script>
+
+
+

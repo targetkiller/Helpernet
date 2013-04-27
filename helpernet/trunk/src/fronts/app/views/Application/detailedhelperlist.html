@@ -1,0 +1,93 @@
+#{extends 'basic-fronts.html' /}
+<div class="mydetailtitle">
+	<h2><strong>"谁来"详情</strong></h2>
+</div>
+<div class="detailwhocome">
+	<img src="&{'fronts.base'}public/common/images/touxiang.jpg" title="头像"/>
+	<div class="username"><i class="icon-user"></i> <a href="#">吴伟林</a></div>
+	<hr />
+	<div class="detailwhocome-content"> 
+		<div class="label">标题:&nbsp;</div>
+		<p class="oneline title mt5" title="标题">随来与我大战C语言</p>
+		<div class="label">详细内容:&nbsp;</div>
+		<textarea class="mt5 text1" readonly="readonly" title="详细内容">随来与我大战C语言随来与我大战C语言随来与我大战C语言</textarea>
+		<div class="label">附加信息:&nbsp;</div>
+		<textarea class="mt5 text2" readonly="readonly" title="附加信息">我要妹子与我大战C语言</textarea>
+		<div class="tags">
+			<span class="label">标签:&nbsp;</span>
+			<code><a href="">重口味</a></code>
+			<code><a href="">重口味</a></code>
+			<code><a href="">重口味</a></code>
+		</div>	
+	</div><!--detailwhocome -->
+	<div class="controll">
+		<button class="btn hide" id="showComment" onclick="showComment()"><i class="icon-chevron-down"></i>评论</button>
+		<button class="btn" id="hideComment" onclick="hideComment()"><i class="icon-chevron-up"></i>收起</button>
+		<!--以下两个按钮,若是非用户则显示"我来",若是用户自身则显示"删除"-->
+		<button class="btn btn-success">我来</button>
+		<button class="btn btn-danger">删除</button>
+	</div>
+	<!-- Duoshuo Comment BEGIN -->
+	<div id="text1">
+		<div class="ds-thread"></div>
+		<script type="text/javascript">
+		var duoshuoQuery = {short_name:"helpernet"};
+		(function() {
+			var ds = document.createElement('script');
+			ds.type = 'text/javascript';ds.async = true;
+			ds.src = 'http://static.duoshuo.com/embed.js';
+			ds.charset = 'UTF-8';
+			(document.getElementsByTagName('head')[0] 
+			|| document.getElementsByTagName('body')[0]).appendChild(ds);
+		})();
+		</script>
+	</div>
+	<!-- Duoshuo Comment END -->
+</div>
+<div class="helpers-detailed-content">
+	<h4>想要帮助的用户:</h4>
+	<div class="detailedhelperlist">
+		<div class="detailedhelper">
+			<i class="icon-user"></i> 
+			<a href="#">TQ</a> &nbsp;&nbsp;爱好或特长:&nbsp;
+			<span class="detailedhobby">数学、语文、英语</span>
+			<a href="#" class="detailedhelpercontact">马上联系他!</a>
+		</div>
+		<div class="detailedhelper">
+			<i class="icon-user"></i> 
+			<a href="#">TQ</a> &nbsp;&nbsp;爱好或特长:&nbsp;
+			<span class="detailedhobby">数学、语文、英语</span>
+			<a href="#" class="detailedhelpercontact">马上联系他!</a>
+		</div>
+		<div class="detailedhelper">
+			<i class="icon-user"></i> 
+			<a href="#">TQ</a> &nbsp;&nbsp;爱好或特长:&nbsp;
+			<span class="detailedhobby">数学、语文、英语</span>
+			<a href="#" class="detailedhelpercontact">马上联系他!</a>
+		</div>
+		<div class="detailedhelper">
+			<i class="icon-user"></i> 
+			<a href="#">TQ</a> &nbsp;&nbsp;爱好或特长:&nbsp;
+			<span class="detailedhobby">数学、语文、英语</span>
+			<a href="#" class="detailedhelpercontact">马上联系他!</a>
+		</div>
+		<div class="detailedhelper">
+			<i class="icon-user"></i> 
+			<a href="#">TQ</a> &nbsp;&nbsp;爱好或特长:&nbsp;
+			<span class="detailedhobby">数学、语文、英语</span>
+			<a href="#" class="detailedhelpercontact">马上联系他!</a>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+function showComment(){
+	$("#showComment").hide();
+	$("#hideComment").show();
+	$("#text1").show();
+}
+function hideComment(){
+	$("#hideComment").hide();
+	$("#showComment").show();
+	$("#text1").hide();
+}
+</script>

@@ -1,0 +1,35 @@
+#{extends 'base-father.html' /} 
+         <!--主导航栏开始-->
+         
+    <div class="navbar">
+    <div class="navbar-inner">
+      <div class="container">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </a>
+        <span class="brand span4" href="#"></span>
+        <div class="nav-collapse">
+          <ul class="nav">
+            <li class="#{get 'mainpage' /}"><a href="@{Application.mainpage}">首页</a></li>
+            <li class="#{get 'myhobby' /}"><a href="@{Application.myhobby}">我感兴趣的</a></li>
+            <li class="#{get 'myhelperlist' /}"><a href="@{Application.myhelperlist}">帮助列表</a></li>
+              <li class="#{get 'aboutus' /}"><a href="@{Application.aboutus}">关于我们</a></li>
+          </ul>
+          <ul class="nav pull-right">
+            <li class="divider-vertical"></li>
+            <form name="searchform" class="navbar-search pull-left" method="post" action="@{DataHandle.search}">
+              <input type="text" name="keyword" class="input search-query" placeholder="搜索">
+              <a href="javascript:document.forms['searchform'].submit();"> <i class="icon-search icon-white"></i></a> 
+            </form>
+          </ul>
+        </div><!-- /.nav-collapse -->
+      </div>
+    </div><!-- /navbar-inner -->
+  </div><!-- /navbar -->
+       <!--主导航栏结束-->
+      <div class="mainpage">
+            #{doLayout /}
+      </div>
+   

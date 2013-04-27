@@ -1,0 +1,45 @@
+#{extends 'base-fronts.html' /}
+#{set title:'搜索结果' /}
+
+<div class="mytitle">
+	<h2><strong>搜索结果</strong></h2>
+</div>
+<!-- whocomelist -->
+	<div class="whocomelist"> 
+	#{list items:eventList ,as:'event'}
+		<div class="whocome">
+			<div class="whocome-left">
+				<img id="navimg" src="&{'fronts.base'}public/common/images/touxiang.jpg" title="头像"/>
+
+				<i class="icon-user"></i><a href="@{UserZone.userInfo(event.userId)}">${event.getUserName()}</a>
+
+			</div>
+			<div class="whocome-right">
+				<div class="whocome-right-first">
+				标题:&nbsp;&nbsp;<a href="#">${event.title}</a>
+				</div>
+				<div class="whocome-right-second">
+					${event.content}
+				</div>
+					标签:&nbsp;
+                    #{list items:event.getTagList(),as:'tag'}
+					<a href="#">${tag.name}</a>
+					#{/list}					
+					<button class="btn btn-small" onclick="location='@{Detail.detail(event.id)}'">详情</button>	
+			</div>
+		</div>
+	#{/list}		
+		</div>
+	</div><!-- whocomelist end-->
+	<script type="text/javascript">
+	function addComment(){
+		 $("#text1").show();
+		 $("#closeComment").show();
+		 $("#addComment").hide();
+	}
+	function closeComment(){
+		 $("#text1").hide();
+		 $("#closeComment").hide();
+		 $("#addComment").show();
+	}
+	</script>

@@ -1,0 +1,204 @@
+#{extends 'base-father.html' /}
+ <div class="mainpage">
+	<div class="mydetailtitle">
+		<h2><strong>"谁来"详情</strong></h2>
+	</div>
+	#{if exist==1}
+	<div class="detailwhocome">
+			<a class="btn btn-mini backtohome" href="&{'fronts.base'}">回到首页</a>
+		<img src="&{'fronts.base'}public/common/images/touxiang.jpg" title="头像"/>
+
+		<div class="username"><i class="icon-user"></i> <a href="@{UserZone.UserInfo()}">${event.getUserName()}</a></div>
+		<span class="detailcometime">发布于:&nbsp;${event.time.asdate('yyyy年MM月dd日')}</span>
+		<hr />
+		<div class="state">状态:&nbsp;${event.getStateName()}</div>
+		<div class="detailwhocome-content"> 
+			<div class="label">标题:&nbsp;</div>
+			<p class="oneline title mt5" title="标题">${event?.title}</p>
+			<div class="label">详细内容:&nbsp;</div>
+			<textarea class="mt5 text1" readonly="readonly" title="详细内容">${event?.content}</textarea>
+			<div class="label">附加信息:&nbsp;</div>
+			<textarea class="mt5 text2" readonly="readonly" title="附加信息">${event?.extra}</textarea>
+			<div class="tags">
+				<span class="label">标签:&nbsp;</span>
+				#{list items:tagList,as:'tag'}
+				<code><a href="">${tag.name}</a></code>
+				#{/list}
+			</div>	
+		</div><!--detailwhocome -->
+		<div class="controll">
+			<button class="btn hide" id="showComment" onclick="showComment()"><i class="icon-chevron-down"></i>评论</button>
+			<button class="btn" id="hideComment" onclick="hideComment()"><i class="icon-chevron-up"></i>收起</button>
+			<!--以下两个按钮,若是非用户则显示"我来",若是用户自身则显示"删除"-->
+			#{if event?.state==0}
+			#{if controllers.UserSecure.isConnected()==false}<!-- 未登录则先登录 -->
+			<button class="btn btn-small btn-success" onclick="alert('请先登录!')">我来<i class="icon-thumbs-up icon-white"></i></button>
+			#{/if}
+			#{else}
+		    #{if event?.userId==controllers.UserSecure.getUserId()}
+		    <button class="btn btn-danger" onclick="deleteEvent(${event?.id});">删除</button>
+			#{/if}
+			#{else}
+			#{if event?.isJoin()==false}
+			<button class="btn btn-success" onclick="joinEvent(${event?.id});" id="${event?.id}join">我来</button>
+			<button class="btn btn-success" style="display:none;" onclick="cancelEvent(${event?.id});" id="${event?.id}cancel">取消</button>
+			#{/if}
+			#{else}
+			<button class="btn btn-success" onclick="cancelEvent(${event?.id});" id="${event?.id}cancel">取消</button>
+			<button class="btn btn-success"  style="display:none;" onclick="joinEvent(${event?.id});" id="${event?.id}join">我来</button>
+			#{/else}
+			#{/else}
+			#{/else}
+			
+			
+			#{/if}
+		</div>
+	#{/if}
+	#{else}
+	<div class="alert alert-error">
+          该帮帮已不存在  
+    </div>
+	#{/else}
+		<!-- Duoshuo Comment BEGIN -->
+		<div id="text1">
+			<div class="ds-thread"></div>
+			<script type="text/javascript">
+			var duoshuoQuery = {short_name:"helpernet"};
+			(function() {
+				var ds = document.createElement('script');
+				ds.type = 'text/javascript';ds.async = true;
+				ds.src = 'http://static.duoshuo.com/embed.js';
+				ds.charset = 'UTF-8';
+				(document.getElementsByTagName('head')[0] 
+				|| document.getElementsByTagName('body')[0]).appendChild(ds);
+			})();
+			</script>
+		</div>
+		<!-- Duoshuo Comment END -->
+	</div>
+	<div class="helpers-detailed-content">
+		<h4>想要帮助的用户:</h4>
+		<div class="detailedhelperlist">
+		#{if event?.userId==controllers.UserSecure.getUserId()}
+		#{list items:helperList,as:'helper'}
+		<div class="detailedhelper">
+				<i class="icon-user"></i> 
+				<a href="@{UserZone.UserInfo(helper.id)}" >${helper.nickname}</a> &nbsp;&nbsp;爱好或特长:&nbsp;
+				<span class="detailedhobby">数学、语文、英语</span>
+				#{if event?.state==0 }
+				<a href="@{UserZone.UserInfo(helper.id)}" class="detailedhelpercontact">马上联系他!</a>
+				<a href="@{HelpInfo.selectHelper(event.id,helper.id)}"class="btn">求助</a>
+				#{/if}
+				#{else}
+				#{if helper.isSelected(event.id)==true}
+				<div class="label">帮助者</div>
+				#{/if}
+				#{/else}
+		</div>
+		#{/list}
+		#{/if}
+		
+		
+		
+		
+		
+		#{else}
+		#{list items:helperList,as:'helper'}
+		<div class="detailedhelper">
+				<i class="icon-user"></i> 
+				<a href="@{UserZone.UserInfo(helper.id)}" >${helper.nickname}</a> &nbsp;&nbsp;爱好或特长:&nbsp;
+				<span class="detailedhobby">数学、语文、英语</span>
+			
+				#{if helper.isSelected(event.id)==true}
+				<div class="label">帮助者</div>
+				#{/if}
+		</div>
+		#{/list}
+		#{/else}
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+function showComment(){
+	$("#showComment").hide();
+	$("#hideComment").show();
+	$("#text1").show();
+}
+function hideComment(){
+	$("#hideComment").hide();
+	$("#showComment").show();
+	$("#text1").hide();
+}
+function deleteEvent(id){
+	$.ajax({
+		   type:'post',
+		   url:"/HelpInfo/deleteEvent",
+		   data:{
+			   eventId:id
+		   },
+		   dataType:'json',
+		   success:function(data){
+			   if(data.status==200){
+				   window.location.href="&{'fronts.base'}"; 
+			   }
+               if(data.status==401){//帮帮已不存在
+            	   window.location.href="&{'fronts.base'}"; 
+			   }
+               if(data.status==402){//删除的不是自己的帮帮
+            	   alert(data.info);
+               }
+		   },
+		   error:function(){
+			  alert("删除失败!");
+		   }
+    })
+}
+function joinEvent(id){
+	$.ajax({
+		   type:'post',
+		   url:'/HelpInfo/joinEvent',
+		   data:{
+			   eventId:id
+		   },
+		   dataType:'json',
+		   success:function(data){
+			   if(data.status==200){
+				   $("#"+id+"join").hide();
+				   $("#"+id+"cancel").show();
+				   alert(data.info);
+			   }
+			   if(data.status==401){
+				   $("#"+id).hide();
+				   alert(data.info);
+			   }
+		   },
+		   error:function(){
+			  alert("操作失败!");
+		   }
+	}) 		
+}
+function cancelEvent(id){
+	$.ajax({
+		   type:'post',
+		   url:'/HelpInfo/cancelEvent',
+		   data:{
+			   eventId:id
+		   },
+		   dataType:'json',
+		   success:function(data){
+			   if(data.status==200){
+				   $("#"+id+"cancel").hide();
+				   $("#"+id+"join").show();
+				   alert(data.info);
+			   }
+			   if(data.status==401){//帮帮不存在
+				   $("#"+id).hide();
+				   alert(data.info);
+			   }
+		   },
+		   error:function(){
+			  alert("操作失败!");
+		   }
+	})
+}
+</script>

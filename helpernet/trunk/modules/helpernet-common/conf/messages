@@ -1,0 +1,7 @@
+# Default helpernet-common messages
+# You can specialize this file for each language.
+# For exemple, for french create a messages.fr file
+
+#helpernet-common.name=helpernet-common
+backs.base=http://helper.scauhci.org:9301/
+fronts.base=http://helper.scauhci.org:9303/

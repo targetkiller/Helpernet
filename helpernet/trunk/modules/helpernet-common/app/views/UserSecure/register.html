@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<!-- 谁来网 帮助你身边的人-->
+<html>
+<head>
+<title>谁来网-注册页面</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- Le styles -->
+<link rel="stylesheet" media="screen"
+	href="@{'/public/common/stylesheets/bootstrap.min.css'}">
+<link rel="stylesheet" media="screen"
+	href="@{'/public/common/stylesheets/bootstrap-responsive.min.css'}">
+<link rel="stylesheet" media="screen"
+	href="@{'/public/common/stylesheets/common.css'}">
+<script src="@{'/public/common/javascripts/jquery-1.7.1.min.js'}"
+	type="text/javascript"></script>
+
+</head>
+<body>
+	<div class="helpernet-nav row">
+		<div class="container">
+			<a href="&{'fronts.base'}"> <img class="logo"
+				src="&{'fronts.base'}public/common/images/helpernetlogo.jpg"></img></a>
+		</div>
+	</div>
+	<div class="register-box">
+		<div class="register-title">
+			<h3>用户注册</h3>
+		</div>
+		<form id="registerForm" action="@{UserSecure.checkRegisterInfo}"
+			method="post" class="form-horizontal">
+			<fieldset>
+			#{authenticityToken /}
+			#{if flash.account_error}
+				<div class="control-group error" id="accountDiv">
+			#{/if}
+			#{else}
+			    <div class="control-group" id="accountDiv">
+			#{/else}
+					<label for="account" class="control-label">账号</label>
+					<div class="controls">
+						<input type="text" name="account" id="account" class="input"
+							placeholder="输入6-16位账号" value="${flash.account}"/>
+							#{if flash.account_error}
+							<span class="label label-important" id="accountError">${flash.account_error}</span>
+							#{/if}
+					</div>
+				</div>
+			#{if flash.nickname_error}
+				<div class="control-group error" id="nicknameDiv">
+			#{/if}
+			#{else}
+			    <div class="control-group" id="nicknameDiv">
+			#{/else}
+					<label for="nickname" class="control-label">昵称</label>
+					<div class="controls">
+						<input type="text" name="nickname" id="nickname" class="input"
+							placeholder="输入3-16位昵称" value="${flash.nickname}"/>
+							#{if flash.nickname_error}
+							<span class="label label-important" id="nicknameError">${flash.nickname_error}</span>
+							#{/if}
+					</div>
+				</div>
+			#{if flash.password_error}
+				<div class="control-group error" id="passwordDiv">
+			#{/if}
+			#{else}
+			    <div class="control-group" id="passwordDiv">
+			#{/else}
+					<label for="password" class="control-label">密码</label>
+					<div class="controls">
+						<input type="password" name="password" id="password" class="input"
+							placeholder="输入6-16位密码" value="${flash.password}"/>
+							#{if flash.password_error}
+							<span class="label label-important" id="passwordError">${flash.password_error}</span>
+							#{/if}
+					</div>
+				</div>
+
+			#{if flash.repeatpassword_error}
+				<div class="control-group error" id="repeatpasswordDiv">
+			#{/if}
+			#{else}
+			    <div class="control-group" id="repeatpasswordDiv">
+			#{/else}
+					<label for="repeatpassword" class="control-label">重复</label>
+					<div class="controls">
+						<input type="password" name="repeatpassword" id="repeatpassword"
+							class="input"/>
+							#{if flash.repeatpassword_error}
+							<span class="label label-important" id="repeatpasswordError">${flash.repeatpassword_error}</span>
+							#{/if}
+					</div>
+				</div>
+			</fieldset>
+			<div class="form-option">
+				<input class="btn btn-primary btn-login" type="submit"
+					value="&nbsp;&nbsp;&nbsp;注册&nbsp;&nbsp;&nbsp;" /> <a type="submit"
+					class="btn btn-primary btn-login"
+					href="http://local.scauhci.org:9303">以后再说</a>
+			</div>
+			<a href="@{UserSecure.login}" class="otherchoice">有帐号？现在就去登陆吧！</a>
+		</form>
+<script type="text/javascript">
+    $(function(){
+        $("#registerForm input").focus(function(){
+            $("#"+$(this).attr("id")+"Div").removeClass("error");
+            $("#"+$(this).attr("id")+"Error").hide();
+        });
+    });
+</script>
+	</div>
+	<div class="footer">
+		&copy;2013&nbsp;<a href="&{'fronts.base'}application/aboutus"
+			target="_blank">华南农业大学信息学院人机交互研究中心学生部</a>
+	</div>
+	<!--footer结束-->
+	<!--底部script开始-->
+</body>
+</html>

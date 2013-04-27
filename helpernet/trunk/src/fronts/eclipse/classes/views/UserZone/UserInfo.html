@@ -1,0 +1,188 @@
+#{extends 'base-father.html' /} 
+
+<div class="userzone">
+	<div class="name">
+		<span class="big strong">${user?.nickname}的个人空间&nbsp;&nbsp;</span>
+		<span><img class="touxiang" src="@{'/public/common/images/touxiang.jpg'}" /></span>
+	</div>
+	<div class="allblock">
+		<div class="blocktwoimg imgblock other">
+			<img src="@{'/public/common/images/imgblock.png'}" />
+		</div>
+		<div class="blockimg docblock pointer">
+			<img src="@{'/public/common/images/docimg.png'}" onclick="lookdocs()"/>
+		</div>
+		<div class="blockimg homeblock other pointer">
+			<img src="@{'/public/common/images/homeimg.png'}" onclick="backtohome()" />
+		</div>
+		<div class="blocktwo chatblock other">
+			<img src="@{'/public/common/images/chatimg.png'}" />
+			<div class="text">${userInfo?.qq} / ${userInfo?.msn}</div>
+		</div>
+		<div class="blocktwo telblock other">
+			<img src="@{'/public/common/images/telimg.png'}" />
+			<div class="text">${userInfo?.longTel}/${userInfo?.shortTel}</div>
+		</div>
+		<div class="blocktwo coinblock other">
+			<img src="@{'/public/common/images/coinimg.png'}" />
+			<div class="text">${userInfo?.coin}</div>
+		</div>
+		<div class="blocktwo emailblock other">
+			<img src="@{'/public/common/images/emailimg.png'}" />
+			<div class="text">${userInfo?.email}</div>
+		</div>
+	</div><!-- allblock -->
+	<div class="listview hide">
+		<div class="backblockimg backdocblock pointer">
+			<img src="@{'/public/common/images/docimg.png'}" onclick="backdocs()"/>
+			
+		</div>
+		<!-- whocomelist -->
+		<div class="whocomelist"> 
+		#{list items: eventList,as:'event'}
+			<div class="whocome" id="${event.id}">
+				<div class="whocome-left">
+					<img id="navimg" src="&{'fronts.base'}public/common/images/touxiang.jpg" title="头像"/>
+					<i class="icon-user"></i><a href="@{UserZone.UserInfo(event.userId)}">${event.getUserName()}</a>
+				</div>
+				<div class="whocome-right">
+					<div class="whocome-right-first">
+					标题:&nbsp;&nbsp;<a href="@{Detail.detail(event.id)}">${event.title}</a>
+					</div>
+					<div class="whocome-right-second">
+						${event.content}
+					</div>
+						标签:&nbsp;
+                        #{list items:event.getTagList(),as:'tag'}
+					    <a href="#">${tag.name}</a>
+					    #{/list}
+						<button class="btn btn-small" onclick="location='@{Detail.detail(event.id)}'">详情</button>
+					#{if event.state==0}<!-- 只有处于申请状态的才可以被操作 -->
+					#{if controllers.UserSecure.isConnected()==false}<!-- 未登录则先登录 -->
+					<button class="btn btn-small btn-success" onclick="alert('请先登录!')">我来<i class="icon-thumbs-up icon-white"></i></button>
+					#{/if}
+					#{else}
+					#{if event.userId==controllers.UserSecure.getUserId()}<!-- 如果是自己发的则可以删除 -->
+					<button class="btn btn-small btn-success" onclick="deleteEvent(${event.id});">删除<i class="icon-thumbs-up icon-white"></i></button>
+					#{/if}
+					#{else}
+					#{if event.isJoin()==true}<!-- 如果参与过，则可以取消 -->
+					<button class="btn btn-small btn-success" id="${event.id}cancel" onclick="cancelEvent(${event.id});">取消<i class="icon-thumbs-up icon-white"></i></button>
+					<button style="display:none;" class="btn btn-small btn-success" id="${event.id}join" onclick="joinEvent(${event.id});">我来<i class="icon-thumbs-up icon-white"></i></button>
+					#{/if}
+					#{else}<!-- 否则则可以参与 -->
+					<button class="btn btn-small btn-success" id="${event.id}join" onclick="joinEvent(${event.id});">我来<i class="icon-thumbs-up icon-white"></i></button>
+					<button style="display:none;" class="btn btn-small btn-success" id="${event.id}cancel" onclick="cancelEvent(${event.id});">取消<i class="icon-thumbs-up icon-white"></i></button>
+					#{/else}
+					#{/else}
+					#{/else}
+					#{/if}	
+					
+					
+					
+					#{else}
+					#{if event.userId==controllers.UserSecure.getUserId()}<!-- 如果是自己发的则可以删除 -->
+					<button class="btn btn-small btn-success" onclick="deleteEvent(${event.id});">删除<i class="icon-thumbs-up icon-white"></i></button>
+					#{/if}
+					#{/else}
+				</div>
+			</div>
+		#{/list}	
+		</div>
+		<!-- whocomelist end -->
+	</div><!--listview-->
+</div><!--userzoon-->
+
+<script type="text/javascript">
+	function lookdocs(){
+			$(".allblock").hide();
+	       $(".listview").show();
+		  obj.setAttribute("id",1);
+		}
+	function backdocs(){
+		  $(".allblock").show();
+		  $(".listview").hide();
+		  obj.setAttribute("id",0);
+		}
+	function backtohome(){
+		window.location.href="&{'fronts.base'}"
+	}
+	function deleteEvent(id){
+		$.ajax({
+			   type:'post',
+			   url:'/HelpInfo/deleteEvent',
+			   data:{
+				   eventId:id
+			   },
+			   dataType:'json',
+			   success:function(data){
+				   if(data.status==200){
+					   $("#"+id).hide();
+					   alert(data.info);
+				   }
+                   if(data.status==401){//帮帮已不存在
+                	   $("#"+id).hide();
+					   alert(data.info);
+				   }
+                   if(data.status==402){//删除的不是自己的帮帮
+                	   alert(data.info);
+                   }
+			   },
+			   error:function(){
+				  alert("删除失败!");
+			   }
+	    })
+	}
+	function joinEvent(id){
+		$.ajax({
+			   type:'post',
+			   url:'/HelpInfo/joinEvent',
+			   data:{
+				   eventId:id
+			   },
+			   dataType:'json',
+			   success:function(data){
+				   if(data.status==200){
+					   $("#"+id+"join").hide();
+					   $("#"+id+"cancel").show();
+					   alert(data.info);
+				   }
+				   if(data.status==401){
+					   $("#"+id).hide();
+					   alert(data.info);
+				   }
+			   },
+			   error:function(){
+				  alert("操作失败!");
+			   }
+		}) 		
+	}
+	function cancelEvent(id){
+		$.ajax({
+			   type:'post',
+			   url:'/HelpInfo/cancelEvent',
+			   data:{
+				   eventId:id
+			   },
+			   dataType:'json',
+			   success:function(data){
+				   if(data.status==200){
+					   $("#"+id+"cancel").hide();
+					   $("#"+id+"join").show();
+					   alert(data.info);
+				   }
+				   if(data.status==401){//帮帮不存在
+					   $("#"+id).hide();
+					   alert(data.info);
+				   }
+			   },
+			   error:function(){
+				  alert("操作失败!");
+			   }
+		})
+	}
+	
+</script>
+
+
+

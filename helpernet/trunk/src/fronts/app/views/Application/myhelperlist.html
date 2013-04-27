@@ -1,0 +1,23 @@
+#{extends 'base-fronts.html' /}
+#{set myhelperlist:'active' /}
+<div class="mytitle">
+	<h2><strong>帮助队列</strong></h2>
+</div>
+<div class="helperlist">
+     #{list items : eventList,as:'event'}
+     <div class="helpers">
+		<div class="helpers-title">
+			谁来:&nbsp;&nbsp;<a href="@{Detail.detail(event.id)}">${event.content}</a>
+		</div>
+		<div class="helpers-content">
+			<h4>想要帮助的用户:</h4>
+			#{list items:event.getHelperList(),as:'user'}
+		    <a href="@{UserZone.UserInfo(user.id)}"><code>${user.nickname}</code></a>
+		    #{/list}
+		</div>
+	</div>
+     #{/list}
+
+
+	
+</div>

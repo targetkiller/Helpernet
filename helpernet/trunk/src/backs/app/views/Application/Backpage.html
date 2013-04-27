@@ -1,0 +1,17 @@
+#{extends 'base-backs.html' /}
+<div class="backpage">
+	<div class="backpagetitle">
+		<h1>个人中心</h1>
+		<div class="backpage-goto">你好,   !你是要前往:</div>
+		<div class="controle-group">
+			<a href="@{application.Checkmylist(0)}" class="backpageblock btn">
+				<img src="&{'fronts.base'}public/common/images/checkmylist.png"></a>
+			<a href="@{application.Myinfo}" class="backpageblock btn">
+				<img src="&{'fronts.base'}public/common/images/myinfo.png"></a>
+			<a href="@{application.Mypassword}" class="backpageblock btn">
+				<img src="&{'fronts.base'}public/common/images/editpassword.png"></a>
+			<a href="@{application.Mytag}" class="backpageblock btn">
+				<img src="&{'fronts.base'}public/common/images/mytag.png"></a>
+		</div>
+	</div>
+</div>
